@@ -15,6 +15,7 @@ class Player;
 class Track {
 	friend int record(Track melody[1000]);
 public:
+        string title, dateCreation, duration;
 		static int load() {
 			ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
 			string str = "", str1 = "";
@@ -42,22 +43,20 @@ public:
 				j++; 
 			}
 	file.close();	
-		}
-string title, dateCreation, duration;
+	 }
 }
 melody[1000];
 
 class Player {
 static int TrackSize() {
 		int count = 0;
-		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt"); 
+		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerMel.txt"); 
 	    string str = "";
 		if (file.is_open()) {
 			cout << "\nСейчас звучит:";
 		}
 		else {
 			cerr << "\nThe file is not found. ";
-
 			return -1;
 		}
 		while (!file.eof()) {
@@ -72,7 +71,7 @@ static int TrackSize() {
 	}
 public:
 	static int  record(Track melody[1000]) {
-ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt", ios::app);	
+ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerMel.txt", ios::app);  	
 int count = 0;
 			string str = "";
 			if (file.is_open()) {
