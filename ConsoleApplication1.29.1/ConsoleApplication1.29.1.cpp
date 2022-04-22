@@ -7,51 +7,46 @@
 #include <ctime>
 #include <string>
 #include <fstream>
-#include <cstdlib>
+#include <vector>
 using namespace std;
 
 class Player;
 
 class Track {
-	friend int record(Track melody[1000]);
-public:
-        string title, dateCreation, duration;
-		static int load() {
-			ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
-			string str = "", str1 = "";
-			int j = 0, count = 0;		
-			if (file.is_open()) {
-				cout << "\nЗагрузка мелодий.\n";
-			}
-			else {
-				cerr << "\nThe file is not found. ";
-				return -1;
-			}
-			while (!file.eof()) {				
-				file >> melody[j].title >> melody[j].duration;
-				str1 = "";
-				for (int l = 0; l < 6; l++) {
-					str1 = "";
-					file >> str1;
-					str.append(str1);
-					str.append(" ");
-				}
-				melody[j].dateCreation = str;
-				str = "";
-				str1 = "";
-				cout << melody[j].title << " " << melody[j].duration << " " << melody[j].dateCreation << "\n";
-				j++; 
-			}
-	file.close();	
-	 }
-}
-melody[1000];
+	friend class Player;
+	public:
+		string title, duration, dateCreation;
+		void set_title(string strTitle) {
 
+			title = strTitle;
+		}
+
+		void set_duration(string strDur) {
+			duration = strDur;
+		}
+
+		void set_dateCreation(string strDate) {
+			dateCreation = strDate;
+		}
+
+		string get_title() {
+			return title;
+		}
+
+		string get_duration() {
+			return duration;
+		}
+
+		string get_dateCreation() {
+			return dateCreation;
+		}
+};                                                   
+	                                               
 class Player {
-static int TrackSize() {
+	static int TrackSize() {
 		int count = 0;
-		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerMel.txt"); 
-	    string str = "";
+		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
+		string str = "";
 		if (file.is_open()) {
 			cout << "\nСейчас звучит:";
 		}
@@ -63,36 +58,34 @@ static int TrackSize() {
 			file >> str;
 			if (str == ":") {
 				count++;
-			}		
+
+			}
 			str = "";
 		}
 		file.close();
-	return count;
+		return count;
 	}
 public:
-	static int  record(Track melody[1000]) {
-ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerMel.txt", ios::app);  	
-int count = 0;
-			string str = "";
-			if (file.is_open()) {
-				cout << "\nФайл открыт для записи.";
-			}
-			else {
-				cerr << "\nФайл не найден.";
-				return 1;
-			}
-		string strTitle="", strDur="", strR="";
+	static int  record() {
+		ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt", ios::app);
+		int count = 0;
+		string str = "";
+		if (file.is_open()) {
+			cout << "\nФайл открыт для записи.";
+		}
+		else {
+			cerr << "\nФайл не найден.";
+			return 1;
+		}
+		string strTitle = "", strDur = "", strR = "";
 		while (strR != "end") {
 			cout << "\nВведите название мелодии.";
 			cin >> strTitle;
 			cout << "\nВведите продолжительность мелодии.";
 			cin >> strDur;
-			melody[count].title = strTitle;
-			melody[count].duration = strDur;
 			time_t t = time(0);
 			char* loc = ctime(&t);
-			melody[count].dateCreation = loc;
-file << strTitle << " " << strDur << " " << loc << ":" << "\n";
+			file << strTitle << " " << strDur << " " << loc << ":" << "\n";
 			count++;
 			cout << "\nДля продолжения записи нажмите любую клавишу, для прекращения - введите end.";
 			strR = "";
@@ -101,52 +94,46 @@ file << strTitle << " " << strDur << " " << loc << ":" << "\n";
 				break;
 			}
 			strTitle = ""; strDur = "";
-		}		
-return 0;
-};
+		}
+		return 0;
+	}
 
 	static void exit() {
-	cout << "\nВыключение плеера.";
-}
-
-static void pause (int count) {
-	if (count == 0) {
-		cout << "\nПауза.";
-	}
-}
-
-	static void play(int count, string strP, int counter) {
-		if (strP != "pause") {
-			if (count == 0) {
-				int numMelody = 0;
-				cout << "\n" << melody[counter - 1].title << " " << melody[counter - 1].duration << " " << melody[counter - 1].dateCreation;
-			}
-			else if (count != 0) {
-				cout << "\n" << melody[counter - 1].title << " " << melody[counter - 1].duration << " " << melody[counter - 1].dateCreation;
-			}
-		}
+		cout << "\nВыключение плеера.";
 	}
 
-   static int next() {
-		int countMel = 0, numM = 0;
-		countMel = TrackSize();
-		srand(time(nullptr));
-		numM = rand() % countMel + 1;
-		return numM;
-    }
-
-   static void stop(int count) {
+	static void pause(int count) {
 		if (count == 0) {
-			cout << "\nВоспроизведение остановлено.";
+			cout << "\nПауза.";
 		}
-    }
+	}
+
+	static void play(int count, string playMelody) {
+		if (count == 0){
+			cout << " " << playMelody;
+	}
+}
+
+		static int next() {
+			int countMel = 0, numM = 0;
+			countMel = TrackSize();
+			srand(time(nullptr));
+			numM = rand() % countMel + 1;
+			return numM;
+		}
+
+		static void stop(int count) {
+			if (count == 0) {
+				cout << "\nВоспроизведение остановлено.";
+			}
+		}
 };
 
 int main()
 {
-    setlocale(LC_ALL, "rus");
-	string str4 = "", str5="", strAct="", strP="";
-	int countPause=0, countMel=0, numMelody = 0, countS=0;
+	setlocale(LC_ALL, "rus");
+	string   strAct = "", strP = "";//str"4 = ",str5="",
+	int countPause = 0, countMel = 0, numMelody = 0, countStop = 0, countPlay = 0, countStr = 0, countLoad = 0;
 	cout << "\n                               АУДИОПЛЕЕР.";
 	cout << "\nНастройки аудиоплеера: ";
 	cout << "\n                       on   - включение аудиоплеера;";
@@ -156,35 +143,84 @@ int main()
 	cout << "\n                       stop - прекращение воспроизведения;";
 	cout << "\n                       record - запись;";
 	cout << "\n                       exit - выключение плеера.";
+	Track  melody;
+	vector< Track> melodyPlay;
+	ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
+	string str = "", str1 = "";
+	int j = 1, count = 0;
+	if (file.is_open()) {
+		cout << "\nЗагрузка мелодий.\n";
+	}
+	else {
+		cerr << "\nThe file is not found. ";
+		return -1;
+	}
+	while (!file.eof()) {
+		Track melody;
+		file >> str >> str1;
+		melody.set_title(str);
+		melody.set_duration(str1);
+		str = "";
+		for (int l = 0; l < 6; l++) {
+			str1 = "";
+			file >> str1;
+			str.append(str1);
+			str.append(" ");
+		}
+		melody.set_dateCreation(str);
+		str = ""; str1 = "";
+		melodyPlay.push_back(melody);
+		j++;
+	}
+	file.close();	
+	for (int i = 0; i < j - 1; i++) {
+		cout << " " << melodyPlay[i].title << " " << melodyPlay[i].duration << " " << melodyPlay[i].dateCreation << "\n";
+	}
 	while (strAct != "exit") {
 		cin >> strAct;
+		if (strAct != "pause") {
+			countPause = 0;
+		}
+		if (strAct != "play" && strAct != "pause") {
+			countPlay = 0;
+		}
+		if (strAct != "play") {
+			countStr = 0;
+		}
 		if (strAct == "on") {
-			Track::load();
+			if (countLoad == 0) {
+				countLoad++;
+			}
 		}
 		if (strAct == "record") {
-			Player::record(melody);
+			Player::record();
 		}
-		else if (strAct == "play"|| strAct == "next") {
-			if (countPause == 0) {
+		else if (strAct == "play" || strAct == "next") {
+			if ((countPause == 0) && (countPlay == 0)) {
 				numMelody = Player::next();
 			}
-			Player::play(countPause, strAct, numMelody);
-			countS = 0;
+			if (countStr == 0) {
+				string playMelody = melodyPlay[numMelody].title;
+				playMelody.append(" ");
+				playMelody.append(melodyPlay[numMelody].duration);
+				playMelody.append(" ");
+				playMelody.append(melodyPlay[numMelody].dateCreation);
+				Player::play(countPause, playMelody);
+				countStop = 0; countPlay++;
+				countStr++;
+			}
 		}
 		else if (strAct == "pause") {
 			Player::pause(countPause);
 			countPause++;		
 		}
 		else if (strAct == "stop") {
-			Player::stop (countS);
-			countS++;
+			Player::stop (countStop);
+			countStop++;
 		}
 		else if (strAct == "exit") {
 			Player::exit();
 			break;
-		}
-       if (strAct != "pause" && countPause > 0) {
-			countPause = 0;
 		}
 	}
 	return 0;
