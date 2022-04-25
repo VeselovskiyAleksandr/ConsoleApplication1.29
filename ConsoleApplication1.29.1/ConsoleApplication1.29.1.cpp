@@ -44,7 +44,7 @@ class Track {
 			Track  melody;
             vector< Track> melodyPlay;
 			string str = "", str1 = "";
-					int j = 1, count = 0;
+					int j = 0, count = 0;
 				ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
 				if (k == -1) {
 					if (file.is_open()) {
@@ -72,7 +72,7 @@ class Track {
 				}
 				file.close();
 				if (k == -1) {
-				for (int i = 0; i < j - 1; i++) {
+				for (int i = 0; i < j; i++) {
 					cout << " " << melodyPlay[i].title << " " << melodyPlay[i].duration << " " << melodyPlay[i].dateCreation << "\n";
 				}
 			}
@@ -186,7 +186,6 @@ int main()
 	cout << "\n                       record - запись;";
 	cout << "\n                       exit - выключение плеера.";
 	Track  melody;
-	vector< string> melodyList;
 	while (strAct != "exit") {
 		cin >> strAct;
 		if (strAct != "pause") {
