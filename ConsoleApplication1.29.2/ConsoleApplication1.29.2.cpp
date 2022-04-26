@@ -1,7 +1,87 @@
 ﻿// ConsoleApplication1.29.2.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //Урок 26. Задача 2. Реализация программы симуляции мобильного телефона.
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <locale.h>
+#include <string>
+#include <ctime>
+#include <string>
+#include <fstream>
+#include <vector>
+using namespace std;
 
+class Phone {
+	string subscriber, phoneNumber;
+public:;
+	void set_subscriber(string name) {
+		subscriber = name;
+	}
 
+	void set_phoneNumber(string number) {
+		phoneNumber = number;
+	}
+
+	string get_subscriber() {
+		return subscriber;
+	}
+
+	string get_phoneNumber() {
+		return phoneNumber;
+	}
+
+	static vector<Phone> load() {
+		Phone  telephone;
+		vector <Phone> subscriberList;
+		string str = "", str1 = "";
+		int j = 0, count = 0;
+		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");
+
+		if (file.is_open()) {
+			cout << "\nЗагрузка мелодий.\n";
+		}
+		else {
+			cerr << "\nThe file is not found. ";
+		}
+		while (!file.eof()) {
+			file >> str >> str1;
+			telephone.set_phoneNumber(str);
+			telephone.set_subscriber(str1);
+			subscriberList.push_back(telephone);
+			j++;
+		}
+		file.close();
+		for (int i = 0; i < j - 1; i++) {
+			cout << " " << subscriberList[i].phoneNumber << " " << subscriberList[i].subscriber << "\n";
+		}
+		return subscriberList;
+	}
+};
+
+int main() {
+	setlocale(LC_ALL, "rus");
+	cout << "                               Телефон.\n";
+	cout << "Настройки телефона: \n";
+	cout << "                      on - включить телефон;\n";
+	cout << "                      add -  добавить в телефон абонента;\n";
+	cout << "                      call - вызов абонента;\n";
+	cout << "                      sms - отпавка sms-сообщений;\n";
+	cout << "                      exit - выходиз программы;\n";
+	string strAct = "";
+	int countLoad = 0;
+	Phone  telephone;
+	cin >> strAct;
+	while (strAct != "exit") {
+		if (strAct == "add") {
+			countLoad = 0;
+		}
+		if (strAct == "on") {
+			if (countLoad == 0) {
+				Phone::load();
+				countLoad++;
+			}
+		}
+	}
+}
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
 // Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
 

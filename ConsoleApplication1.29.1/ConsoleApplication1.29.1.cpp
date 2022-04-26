@@ -109,8 +109,6 @@ class Player {
 public:
 	static int  record() {
 		ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt", ios::app);
-		int count = 0;
-		string str = "";
 		if (file.is_open()) {
 			cout << "\nФайл открыт для записи.";
 		}
@@ -127,7 +125,6 @@ public:
 			time_t t = time(0);
 			char* loc = ctime(&t);
 			file << strTitle << " " << strDur << " " << loc << ":" << "\n";
-			count++;
 			cout << "\nДля продолжения записи нажмите любую клавишу, для прекращения - введите end.";
 			strR = "";
 			cin >> strR;
