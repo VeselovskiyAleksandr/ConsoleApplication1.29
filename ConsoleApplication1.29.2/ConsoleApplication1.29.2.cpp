@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <windows.h> 
 using namespace std;
 
 class Phone {
@@ -55,6 +56,53 @@ public:;
 		}
 		return subscriberList;
 	}
+	static int add() {
+		ofstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt", ios::app);
+		if (file.is_open()) {
+			cout << "\nФайл открыт для записи.";
+		}
+		else {
+			cerr << "\nФайл не найден.";
+			return 1;
+		}
+		string strNumber = "", strName = "";
+			cout << "\nТелефон абонента: ";
+			cin >> strNumber;
+			cout << "\nИмя абонента: ";
+			cin >> strName;
+			file << strNumber << " " << strName << "\n";
+            strNumber = ""; strName = "";
+		return 0;
+	}
+
+	static void call() {
+		string telNumber = "";
+		int interval = 0;
+		cout << "\nВведите номер абонента ";
+		cin >> telNumber;
+		time_t  start = time(nullptr);
+		time_t t = 15 + start;
+		do {
+			time_t start= time(nullptr);
+			Beep(750, 2250);
+			Sleep(1500);
+			if (start > t) {
+				cout << "\nВам обязательно ответят!";
+				break;
+			}
+		} while (t > start);
+	}
+
+	static void sms() {
+		string telNumber = "", message = "";
+		cout << "\nВведите номер телефона.";
+		cin >> telNumber;
+		cout << "\nВведите сообщение.";
+		cin >> message;
+		cout << "\nотправка сообщения...";
+		Sleep(3000);
+		cout << "\nВаше сообщение отправлено.";
+	}
 };
 
 int main() {
@@ -69,8 +117,9 @@ int main() {
 	string strAct = "";
 	int countLoad = 0;
 	Phone  telephone;
-	cin >> strAct;
+	
 	while (strAct != "exit") {
+cin >> strAct;
 		if (strAct == "add") {
 			countLoad = 0;
 		}
@@ -79,6 +128,18 @@ int main() {
 				Phone::load();
 				countLoad++;
 			}
+		}
+		else if (strAct == "add") {
+			Phone::add();
+		}
+		else if (strAct == "call") {
+			Phone::call();
+		}
+		else if (strAct == "sms") {
+			Phone::sms();
+		}
+		else if (strAct == "exit") {
+			break;
 		}
 	}
 }
