@@ -38,7 +38,7 @@ public:;
 		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");
 
 		if (file.is_open()) {
-			cout << "\nЗагрузка мелодий.\n";
+			cout << "\nЗагрузка телефона.\n";
 		}
 		else {
 			cerr << "\nThe file is not found. ";
@@ -116,13 +116,8 @@ int main() {
 	cout << "                      exit - выходиз программы;\n";
 	string strAct = "";
 	int countLoad = 0;
-	Phone  telephone;
-	
 	while (strAct != "exit") {
 cin >> strAct;
-		if (strAct == "add") {
-			countLoad = 0;
-		}
 		if (strAct == "on") {
 			if (countLoad == 0) {
 				Phone::load();
@@ -143,6 +138,7 @@ cin >> strAct;
 		}
 	}
 }
+
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
 // Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
 
