@@ -8,7 +8,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <windows.h> 
+//#include <windows.h> 
 using namespace std;
 
 class Phone {
@@ -81,12 +81,12 @@ public:;
 		cout << "\nВведите номер абонента ";
 		cin >> telNumber;
 		time_t  start = time(nullptr);
-		time_t t = 15 + start;
+		time_t t = 5 + start;
 		do {
-			time_t start= time(nullptr);
-			Beep(750, 2250);
-			Sleep(1500);
-			if (start > t) {
+			time_t st= time(nullptr);
+			//Beep(750, 2250);
+			//Sleep(1500);
+			if (st > t) {
 				cout << "\nВам обязательно ответят!";
 				break;
 			}
@@ -100,7 +100,7 @@ public:;
 		cout << "\nВведите сообщение.";
 		cin >> message;
 		cout << "\nотправка сообщения...";
-		Sleep(3000);
+		//Sleep(3000);
 		cout << "\nВаше сообщение отправлено.";
 	}
 };
