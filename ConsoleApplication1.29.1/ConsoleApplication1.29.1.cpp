@@ -14,10 +14,9 @@ class Player;
 
 class Track {
 	friend class Player;
-	public:
 		string title, duration, dateCreation;
+public:
 		void set_title(string strTitle) {
-
 			title = strTitle;
 		}
 
@@ -40,9 +39,9 @@ class Track {
 		string get_dateCreation() {
 			return dateCreation;
 		}
-		static vector<Track> load(int k) {
-			Track  melody;
-            vector< Track> melodyPlay;
+		static void load(int k) {   //переменная k обеспечивает вывод 
+			Track  melody;            //записи о загрузке мелодий один раз.  
+            vector<Track> melodyPlay;
 			string str = "", str1 = "";
 					int j = 0, count = 0;
 				ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
@@ -55,8 +54,8 @@ class Track {
 					}
 				}
 				while (!file.eof()) {
-					file >> str >> str1;
-					melody.set_title(str);
+					file >> str >> str1;           // строки str и str1 собирают
+					melody.set_title(str);         //строку данных о мелодии
 					melody.set_duration(str1);
 					str = "";
 					for (int l = 0; l < 6; l++) {
@@ -74,22 +73,22 @@ class Track {
 				if (k == -1) {
 				for (int i = 0; i < j; i++) {
 					cout << " " << melodyPlay[i].title << " " << melodyPlay[i].duration << " " << melodyPlay[i].dateCreation << "\n";
-				}
+				}			
 			}
 			else {
 				cout << " " << melodyPlay[k].title << " " << melodyPlay[k].duration << " " << melodyPlay[k].dateCreation << "\n";
 			}
-			return melodyPlay;
 		}
 };                                                   
 	                                               
 class Player {
+public:
 	static int TrackSize() {
 		int count = 0;
 		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
 		string str = "";
 		if (file.is_open()) {
-			cout << "\nСейчас звучит:";
+
 		}
 		else {
 			cerr << "\nThe file is not found. ";
@@ -99,14 +98,13 @@ class Player {
 			file >> str;
 			if (str == ":") {
 				count++;
-
 			}
 			str = "";
 		}
 		file.close();
 		return count;
 	}
-public:
+
 	static int  record() {
 		ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt", ios::app);
 		if (file.is_open()) {
@@ -148,21 +146,20 @@ public:
 
 	static void play(int count, int counter) {
 		if (count == 0){
+			cout << "\nСейчас звучит: ";
 		Track::	  load(counter);
 	}
 }
 
-		static int next() {
-			int countMel = 0, numM = 0;
-			countMel = TrackSize();
+		static int next(int countMel) {
+			int numM = 0;
 			srand(time(nullptr));
 			numM = rand() % countMel + 1;
 			return numM;
 		}
 
 		static void stop(int count) {
-			if (count == 0) {
-			
+			if (count == 0) {			
 				cout << "\nВоспроизведение остановлено.";
 			}
 		}
@@ -172,7 +169,7 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
 	string   strAct = "", strP = "";
-	int countPause = 0, countMel = 0, numMelody = 0, countStop = 0, countPlay = 0, countStr = 0, countLoad = 0;
+	int countPause = 0, countMel = 0, numMelody = 0, countStop = 0, countPlay = 0, countStr = 0, countLoad = 0, numberMelody=0, j=0;
 	cout << "\n                               АУДИОПЛЕЕР.";
 	cout << "\nНастройки аудиоплеера: ";
 	cout << "\n                       on   - включение аудиоплеера;";
@@ -188,16 +185,17 @@ int main()
 		if (strAct != "pause") {
 			countPause = 0;
 		}
-		if (strAct != "play" && strAct != "pause") {
-			countPlay = 0;
+		if (strAct != "play"&&strAct!="pause") {
+			countPlay = 0; 
 		}
 		if (strAct != "play") {
 			countStr = 0;
 		}
 		if (strAct == "on") {
 			if (countLoad == 0) {
-				int j = -1;
-				Track:: load(j);
+				numberMelody = -1;      
+			Track:: load(numberMelody);	
+             numMelody = Player::TrackSize();
 				countLoad++;
 			}
 		}
@@ -206,15 +204,16 @@ int main()
 			countLoad = 0;
 		}
 		else if (strAct == "play" || strAct == "next") {
-			if ((countPause == 0) && (countPlay == 0)) {
-				numMelody = Player::next();
+			if (countPlay == 0) {
+                numberMelody = Player::next(numMelody);
+				j = numberMelody; 
+				}
+				if (countStr == 0) {			
+					Player::play(countPause, j);
+					countStop = 0; countPlay++;
+					countStr++;
+				}
 			}
-			if (countStr == 0) {
-				Player::play(countPause, numMelody);
-				countStop = 0; countPlay++;
-				countStr++;
-			}
-		}
 		else if (strAct == "pause") {
 			Player::pause(countPause);
 			countPause++;		
