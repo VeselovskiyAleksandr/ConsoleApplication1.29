@@ -84,6 +84,7 @@ public:;
 		time_t t = 5 + start;
 		do {
 			time_t st= time(nullptr);
+			cout << "\a";
 			//Beep(750, 2250);
 			//Sleep(1500);
 			if (st > t) {

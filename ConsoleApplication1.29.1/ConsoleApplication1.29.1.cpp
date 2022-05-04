@@ -41,14 +41,13 @@ public:
 		string get_dateCreation() {
 			return dateCreation;
 		}
-		vector<Track> melodyPlay; //добавил
+		vector<Track> melodyPlay; 
 };                                                   
 	                                               
 class Player {
-public:
-static vector<Track> load(vector<Track> melodyPlay) {
+            public:
+           static vector<Track> load(vector<Track> melodyPlay) {
 			    Track  melody;          
-           // vector<Track> melodyPlay;
 			string str = "", str1 = "";
 					int j = 0, count = 0;
 				ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
@@ -210,13 +209,15 @@ int main()
 				}
 			}
 		else if (strAct == "pause") {
-			Player::pause(countPause);
-			countPause++;		
+			if (countPlay > 0) {
+				Player::pause(countPause);
+				countPause++;
+			}
 		}
 		else if (strAct == "stop") {
-			Player::stop (countStop);
-			countStop++;
-		}
+				Player::stop(countStop);
+				countStop++;
+			}
 		else if (strAct == "exit") {
 			Player::exit();
 			break;
