@@ -14,8 +14,10 @@ class Player;
 
 class Track {
 	friend class Player;
-		string title, duration, dateCreation;
+	
 public:
+		string title, duration, dateCreation;
+
 		void set_title(string strTitle) {
 			title = strTitle;
 		}
@@ -39,20 +41,23 @@ public:
 		string get_dateCreation() {
 			return dateCreation;
 		}
-		static void load(int k) {   //переменная k обеспечивает вывод 
-			Track  melody;            //записи о загрузке мелодий один раз.  
-            vector<Track> melodyPlay;
+		vector<Track> melodyPlay; //добавил
+};                                                   
+	                                               
+class Player {
+public:
+static vector<Track> load(vector<Track> melodyPlay) {
+			    Track  melody;          
+           // vector<Track> melodyPlay;
 			string str = "", str1 = "";
 					int j = 0, count = 0;
 				ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
-				if (k == -1) {
 					if (file.is_open()) {
 						cout << "\nЗагрузка мелодий.\n";
 					}
 					else {
 						cerr << "\nThe file is not found. ";
 					}
-				}
 				while (!file.eof()) {
 					file >> str >> str1;           // строки str и str1 собирают
 					melody.set_title(str);         //строку данных о мелодии
@@ -66,23 +71,16 @@ public:
 					}
 					melody.set_dateCreation(str);
 					str = ""; str1 = "";
-					melodyPlay.push_back(melody);
-					j++;
+					melodyPlay.push_back( melody);
+					j++; 
 				}
 				file.close();
-				if (k == -1) {
 				for (int i = 0; i < j; i++) {
 					cout << " " << melodyPlay[i].title << " " << melodyPlay[i].duration << " " << melodyPlay[i].dateCreation << "\n";
 				}			
-			}
-			else {
-				cout << " " << melodyPlay[k].title << " " << melodyPlay[k].duration << " " << melodyPlay[k].dateCreation << "\n";
-			}
+				return  melodyPlay;
 		}
-};                                                   
-	                                               
-class Player {
-public:
+
 	static int TrackSize() {
 		int count = 0;
 		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
@@ -143,11 +141,10 @@ public:
 			cout << "\nПауза.";
 		}
 	}
-
-	static void play(int count, int counter) {
+	static void play(int count, vector<Track>PlayList, int num) {
 		if (count == 0){
 			cout << "\nСейчас звучит: ";
-		Track::	  load(counter);
+			cout<< PlayList[num].title<<" "<< PlayList[num].duration<<" "<< PlayList[num].dateCreation << "\n";
 	}
 }
 
@@ -169,10 +166,9 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
 	string   strAct = "", strP = "";
-	int countPause = 0, countMel = 0, numMelody = 0, countStop = 0, countPlay = 0, countStr = 0, countLoad = 0, numberMelody=0, j=0;
+	int countPause = 0, countMel = 0, numMelody = 0, countStop = 0, countPlay = 0, countStr = 0, countRecord = 0, numberMelody=0;
 	cout << "\n                               АУДИОПЛЕЕР.";
-	cout << "\nНастройки аудиоплеера: ";
-	cout << "\n                       on   - включение аудиоплеера;";
+	cout << "\nНастройки аудиоплеера: ";	
 	cout << "\n                       play - воспроизведение звукозаписи;";
 	cout << "\n                       pause - пауза;";
 	cout << "\n                       next - переход к следующей записи;";
@@ -180,6 +176,9 @@ int main()
 	cout << "\n                       record - запись;";
 	cout << "\n                       exit - выключение плеера.";
 	Track  melody;
+	 vector <Track> melodyPlay;
+	vector<Track>PlayList = Player::load(melodyPlay);
+	numMelody = Player::TrackSize();
 	while (strAct != "exit") {
 		cin >> strAct;
 		if (strAct != "pause") {
@@ -190,26 +189,22 @@ int main()
 		}
 		if (strAct != "play") {
 			countStr = 0;
-		}
-		if (strAct == "on") {
-			if (countLoad == 0) {
-				numberMelody = -1;      
-			Track:: load(numberMelody);	
+		}	
+			if (countRecord != 0) {				    
+				vector<Track>PlayList = Player:: load(melodyPlay);
              numMelody = Player::TrackSize();
-				countLoad++;
-			}
+				countRecord=0;			
 		}
 		if (strAct == "record") {
 			Player::record();
-			countLoad = 0;
+			countRecord++;
 		}
 		else if (strAct == "play" || strAct == "next") {
 			if (countPlay == 0) {
-                numberMelody = Player::next(numMelody);
-				j = numberMelody; 
+                numberMelody = Player::next(numMelody); 
 				}
 				if (countStr == 0) {			
-					Player::play(countPause, j);
+					Player::play( countPause, PlayList, numberMelody);
 					countStop = 0; countPlay++;
 					countStr++;
 				}
