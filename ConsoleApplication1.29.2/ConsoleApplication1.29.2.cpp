@@ -14,10 +14,10 @@ class Phone;
 
 class Contacts {
 	friend class Phone;
-public:
+
 string subscriber="", phoneNumber="";
 int serialNumber=0;
-
+public:
 void set_serialNumber(int number) {
 	serialNumber = number;
 }
