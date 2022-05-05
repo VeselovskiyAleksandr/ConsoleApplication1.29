@@ -14,10 +14,9 @@ class Player;
 
 class Track {
 	friend class Player;
-	
-public:
-		string title, duration, dateCreation;
 
+		string title, duration, dateCreation;
+public:
 		void set_title(string strTitle) {
 			title = strTitle;
 		}
