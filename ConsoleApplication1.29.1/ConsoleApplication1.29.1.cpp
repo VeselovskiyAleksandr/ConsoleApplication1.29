@@ -14,7 +14,6 @@ class Player;
 
 class Track {
 	friend class Player;
-
 		string title, duration, dateCreation;
 public:
 		void set_title(string strTitle) {
@@ -40,7 +39,7 @@ public:
 		string get_dateCreation() {
 			return dateCreation;
 		}
-		vector<Track> melodyPlay; 
+	//	vector<Track> melodyPlay; 
 };                                                   
 	                                               
 class Player {
@@ -101,126 +100,109 @@ class Player {
 		return count;
 	}
 
-	static int  record() {
-		ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt", ios::app);
-		if (file.is_open()) {
-			cout << "\nФайл открыт для записи.";
-		}
-		else {
-			cerr << "\nФайл не найден.";
-			return 1;
-		}
-		string strTitle = "", strDur = "", strR = "";
-		while (strR != "end") {
-			cout << "\nВведите название мелодии.";
-			cin >> strTitle;
-			cout << "\nВведите продолжительность мелодии.";
-			cin >> strDur;
-			time_t t = time(0);
-			char* loc = ctime(&t);
-			file << strTitle << " " << strDur << " " << loc << ":" << "\n";
-			cout << "\nДля продолжения записи нажмите любую клавишу, для прекращения - введите end.";
-			strR = "";
-			cin >> strR;
-			if (strR == "end") {
-				break;
+	 int  record(string commandRec) {
+		if (commandRec == "record") {
+			ofstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt", ios::app);
+			if (file.is_open()) {
+				cout << "\nФайл открыт для записи.";
 			}
-			strTitle = ""; strDur = "";
+			else {
+				cerr << "\nФайл не найден.";
+				return 1;
+			}
+			string strTitle = "", strDur = "", strR = "";
+			while (strR != "end") {
+				cout << "\nВведите название мелодии.";
+				cin >> strTitle;
+				cout << "\nВведите продолжительность мелодии.";
+				cin >> strDur;
+				time_t t = time(0);
+				char* loc = ctime(&t);
+				file << strTitle << " " << strDur << " " << loc << ":" << "\n";
+				cout << "\nДля продолжения записи нажмите любую клавишу, для прекращения - введите end.";
+				strR = "";
+				cin >> strR;
+				if (strR == "end") {
+					break;
+				}
+				strTitle = ""; strDur = "";
+			}
 		}
 		return 0;
 	}
 
-	static void exit() {
-		cout << "\nВыключение плеера.";
-	}
-
-	static void pause(int count) {
-		if (count == 0) {
-			cout << "\nПауза.";
+	 void pause(string commandPaus) {
+		static int countComPaus = 0;
+		if (commandPaus == "pause") {
+			if (countComPaus == 0) {
+				cout << "\nПауза.";
+				countComPaus++;
+			}
 		}
+		else countComPaus = 0;
 	}
-	static void play(int count, vector<Track>PlayList, int num) {
-		if (count == 0){
-			cout << "\nСейчас звучит: ";
-			cout<< PlayList[num].title<<" "<< PlayList[num].duration<<" "<< PlayList[num].dateCreation << "\n";
-	}
-}
 
-		static int next(int countMel) {
+static int next(){
+static int numberMelody = Player::TrackSize();
 			int numM = 0;
 			srand(time(nullptr));
-			numM = rand() % countMel + 1;
+			numM = rand() % numberMelody + 1;
 			return numM;
 		}
 
-		static void stop(int count) {
-			if (count == 0) {			
-				cout << "\nВоспроизведение остановлено.";
-			}
+	    void play(string commandPlay, vector<Track> PlayList){
+		static int countPlay = 0, num=0;
+		if((commandPlay=="next")||((commandPlay == "play")&&( countPlay == 0))){
+			num = Player:: next();
+			cout << "\nСейчас звучит: ";
+			countPlay++;
+			cout<< PlayList[num].title<<" "<< PlayList[num].duration<<" "<< PlayList[num].dateCreation << "\n";
+	}
+		if (commandPlay != "play") {
+			countPlay = 0;
 		}
+}
+
+		 void stop(string commandS) {
+			static	int countComS = 0;
+			if (commandS == "stop") {
+				if (countComS == 0) {
+					cout << "\nВоспроизведение остановлено.";
+					countComS++;
+				}
+			}
+				else countComS = 0;
+	 }
+
+         void exit(string commandEx) {
+		     if (commandEx == "exit") {
+			cout << "\nВыключение плеера.";
+		}
+	}
 };
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	string   strAct = "", strP = "";
-	int countPause = 0, countMel = 0, numMelody = 0, countStop = 0, countPlay = 0, countStr = 0, countRecord = 0, numberMelody=0;
+	string   strAct = "";
 	cout << "\n                               АУДИОПЛЕЕР.";
-	cout << "\nНастройки аудиоплеера: ";	
+	cout << "\nНастройки аудиоплеера: ";
 	cout << "\n                       play - воспроизведение звукозаписи;";
 	cout << "\n                       pause - пауза;";
 	cout << "\n                       next - переход к следующей записи;";
 	cout << "\n                       stop - прекращение воспроизведения;";
 	cout << "\n                       record - запись;";
 	cout << "\n                       exit - выключение плеера.";
-	Track  melody;
+	Player Song;
 	 vector <Track> melodyPlay;
 	vector<Track>PlayList = Player::load(melodyPlay);
-	numMelody = Player::TrackSize();
 	while (strAct != "exit") {
 		cin >> strAct;
-		if (strAct != "pause") {
-			countPause = 0;
-		}
-		if (strAct != "play"&&strAct!="pause") {
-			countPlay = 0; 
-		}
-		if (strAct != "play") {
-			countStr = 0;
-		}	
-			if (countRecord != 0) {				    
-				vector<Track>PlayList = Player:: load(melodyPlay);
-             numMelody = Player::TrackSize();
-				countRecord=0;			
-		}
-		if (strAct == "record") {
-			Player::record();
-			countRecord++;
-		}
-		else if (strAct == "play" || strAct == "next") {
-			if (countPlay == 0) {
-                numberMelody = Player::next(numMelody); 
-				}
-				if (countStr == 0) {			
-					Player::play( countPause, PlayList, numberMelody);
-					countStop = 0; countPlay++;
-					countStr++;
-				}
-			}
-		else if (strAct == "pause") {
-			if (countPlay > 0) {
-				Player::pause(countPause);
-				countPause++;
-			}
-		}
-		else if (strAct == "stop") {
-				Player::stop(countStop);
-				countStop++;
-			}
-		else if (strAct == "exit") {
-			Player::exit();
-			break;
-		}
+	Song.play(strAct, PlayList);
+	Song.record(strAct);
+	Song.pause(strAct);
+    Song.stop(strAct);
+	Song.exit(strAct);
 	}
 	return 0;
 }

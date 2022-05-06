@@ -8,10 +8,12 @@
 #include <string>
 #include <fstream>
 #include <vector>
-
 using namespace std;
 
-class Display {
+class Display;
+
+class Window {
+	friend class Display;
 	int anchСoordinateX, anchCoordinateY, widthDisplay, heightDisplay;
 public:
 	 void set_anchСoordinate(int x, int y) {
@@ -42,9 +44,38 @@ public:
 	 int get_heightDisplay() {
 		return heightDisplay;
     }
+};
 
-	static void resize(int *ww, int *wh) {
+class Display {
+
+		static void showDisplay(int &wX, int &wY, int &wW, int &wH){
+			int numberRow = 0, numberCol = 0;
+		for(int row=0;row<50;row++){
+		for (int col = 0; col < 80; col++) {
+ if (row==0||row==49){
+				cout << "-";
+		}
+ else if (col == 0 || col == 79) {
+				cout << "|";
+			}
+else if (row >= wY && row < wY+wH && col>=wX && col < wX+wW) {
+		cout << "1";
+}
+else  {
+	cout << "0";
+}
+if (col == 79) {
+				cout << "\n";
+			}
+		  }
+       }
+	}	
+};
+
+class MonitorControl {
+static void resize(int *ww, int *wh) {
 		Display monitor;
+		vector<Window>windows;
 		int w=0, h=0;
 		do {
 			cout << "\nУкажите ширину окна.";
@@ -79,32 +110,11 @@ public:
 		(*wy) = monitor.get_coordinateY();
 	}
 
-		static void showDisplay(int &wX, int &wY, int &wW, int &wH){
-		for(int row=0;row<50;row++){
-		for (int col = 0; col < 80; col++) {
- if (row==0||row==49){
-				cout << "-";
-		}
- else if (col == 0 || col == 79) {
-				cout << "|";
-			}
-else if (row >= wY && row < wY+wH && col>=wX && col < wX+wW) {
-		cout << "1";
-}
-else  {
-	cout << "0";
-}
-if (col == 79) {
-				cout << "\n";
-			}
-		  }
-       }
-	}
-
-	static void close() {
+static void close() {
 		cout << "\nВыключение монитора.";
 	}
 };
+
 
 int main()
 {
