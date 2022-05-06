@@ -40,16 +40,15 @@ void set_serialNumber(int number) {
 	string get_phoneNumber() {
 		return phoneNumber;
 	}
-vector <Contacts> subscriberList;
 };
 
 
 class Phone {
 public:
 	static vector<Contacts> load(vector <Contacts> subscriberList) {
-		Contacts telephone;		
+		Contacts telephone;
 		string str = "", str1 = "";
-		int j = 0, strNumber=0;
+		int j = 0, strNumber = 0;
 		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");
 		if (file.is_open()) {
 			cout << "\nЗагрузка телефона.\n";
@@ -58,83 +57,105 @@ public:
 			cerr << "\nThe file is not found. ";
 		}
 		while (!file.eof()) {
-			file >>strNumber>> str >> str1;
+			file >> strNumber >> str >> str1;
 			telephone.set_serialNumber(strNumber);
-		    telephone.set_phoneNumber(str);
+			telephone.set_phoneNumber(str);
 			telephone.set_subscriber(str1);
 			subscriberList.push_back(telephone);
 			j++;
 		}
 		file.close();
 		for (int i = 0; i < j - 1; i++) {
-			cout<<" "<< subscriberList[i].serialNumber << " " << subscriberList[i].phoneNumber << " " << subscriberList[i].subscriber << "\n";
+			cout << " " << subscriberList[i].serialNumber << " " << subscriberList[i].phoneNumber << " " << subscriberList[i].subscriber << "\n";
 		}
 		return subscriberList;
 	}
-	static int add(int countSubscr) {
-		ofstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt", ios::app);
-		if (file.is_open()) {
-			cout << "\nФайл открыт для записи.";
-		}
-		else {
-			cerr << "\nФайл не найден.";
-			return 1;
-		}
-		string strNumber = "", strName = "";
-			cout << "\nТелефон абонента: ";
-			cin >> strNumber;
-			cout << "\nИмя абонента: ";
-			cin >> strName;
-			file<< countSubscr<<" " << strNumber << " " << strName << "\n";
-            strNumber = ""; strName = "";
+
+	static int PhoneSize() {
+		static int countLoad = 0;
+		vector<Contacts>phoneBook;
+		countLoad = phoneBook.size();
+		return countLoad;
+	}
+	
+	 int add(string strAdd) {
+		 static int countSubscr = Phone::PhoneSize();
+		 if (strAdd == "add") {
+			 ofstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt", ios::app);
+			 if (file.is_open()) {
+				 cout << "\nФайл открыт для записи.";
+			 }
+			 else {
+				 cerr << "\nФайл не найден.";
+				 return 1;
+			 }
+			 string strNumber = "", strName = "";
+			 cout << "\nТелефон абонента: ";
+			 cin >> strNumber;
+			 cout << "\nИмя абонента: ";
+			 cin >> strName;
+			 file << countSubscr << " " << strNumber << " " << strName << "\n";
+			 strNumber = ""; strName = "";
+		 }
 		return 0;
 	}
 
-	static void call(int number, vector<Contacts>phoneBook) {
-		int telNumber = 0;
-		int interval = 0;
-		cout << "\nВведите номер абонента.";
-		cout<<"\nДля вызова абонента из телефонного справочника введите порядковый номер ";
-		cin >> telNumber;
-		if (telNumber <= number) {
-			cout << "\nВызов абонента: " << phoneBook[telNumber-1].phoneNumber << " " << phoneBook[telNumber-1].subscriber << "\n";
-		}
-		time_t  start = time(nullptr);
-		time_t t = 3 + start;
-		do {
-			time_t st= time(nullptr);
-			cout << '\a';
-			if (st > t) {
-				cout << "\nВам обязательно ответят!";
-				break;
-			}
-		} while (true);
+	 void call(string strNumber, vector<Contacts>phoneBook) {
+		 if (strNumber == "call") {
+			 static int number = Phone::PhoneSize();
+			 int telNumber = 0;
+			 int interval = 0;
+			 cout << "\nВведите номер абонента.";
+			 cout << "\nДля вызова абонента из телефонного справочника введите порядковый номер ";
+			 cin >> telNumber;
+			 if (telNumber <= number) {
+				 cout << "\nВызов абонента: " << phoneBook[telNumber - 1].phoneNumber << " " << phoneBook[telNumber - 1].subscriber << "\n";
+			 }
+			 time_t  start = time(nullptr);
+			 time_t t = 3 + start;
+			 do {
+				 time_t st = time(nullptr);
+				 cout << '\a';
+				 if (st > t) {
+					 cout << "\nВам обязательно ответят!";
+					 break;
+				 }
+			 } while (true);
+		 }
 	}
 
-	static void sms(int number, vector<Contacts>phoneBook) {
-		string message = "";
-		int telNumber = 0;
-		cout << "\nВведите номер телефона.";
-		cout << "\nДля отправки сообщения абоненту из телефонного справочника введите порядковый номер ";
-		
-		cin >> telNumber;
-		cout << "\nВведите сообщение.";
-		cin >> message;
-        if (telNumber <= number) {
-			cout << "\n Абонент " << phoneBook[telNumber-1].phoneNumber << " " << phoneBook[telNumber-1].subscriber << "\n";
-		}
-		time_t  start = time(nullptr);
-		time_t t = 3 + start;
-        cout << "\nотправка сообщения...";
-		do {
-			time_t st = time(nullptr);
-			cout << '\a';
-			if (st > t) {
-				cout << "\nВаше сообщение отправлено.";
-				break;
-			}
-		} while (true);
-	}
+	 void sms(string strSms, vector<Contacts>phoneBook) {
+		 if (strSms == "sms") {
+			 static int number = Phone::PhoneSize();
+			 string message = "";
+			 int telNumber = 0;
+			 cout << "\nВведите номер телефона.";
+			 cout << "\nДля отправки сообщения абоненту из телефонного справочника введите порядковый номер ";
+			 cin >> telNumber;
+			 cout << "\nВведите сообщение.";
+			 cin >> message;
+			 if (telNumber <= number) {
+				 cout << "\n Абонент " << phoneBook[telNumber - 1].phoneNumber << " " << phoneBook[telNumber - 1].subscriber << "\n";
+			 }
+			 time_t  start = time(nullptr);
+			 time_t t = 3 + start;
+			 cout << "\nотправка сообщения...";
+			 do {
+				 time_t st = time(nullptr);
+				 cout << '\a';
+				 if (st > t) {
+					 cout << "\nВаше сообщение отправлено.";
+					 break;
+				 }
+			 } while (true);
+		 }
+	 }
+
+	 void exit(string strEx) {
+		 if (strEx == "exit") {
+			 cout << "\nВыключение телефона.";
+		 }
+	 }
 };
 
 int main() {
@@ -146,25 +167,16 @@ int main() {
 	cout << "                      sms - отпавка sms-сообщений;\n";
 	cout << "                      exit - выходиз программы;\n";
 	string strAct = "";
-	int countLoad = 0;
 	Contacts contact;
+	Phone telephone;
 	vector<Contacts>subscriberList;
 	vector<Contacts>phoneBook =Phone:: load(subscriberList);
-	countLoad= phoneBook.size();
 	while (strAct != "exit") {
     cin >> strAct;
-		 if (strAct == "add") {
-			Phone::add(countLoad);
-		}
-		else if (strAct == "call") {
-			Phone::call(countLoad, phoneBook);
-		}
-		else if (strAct == "sms") {
-			Phone::sms(countLoad, phoneBook);
-		}
-		else if (strAct == "exit") {
-			break;
-		}
+	        telephone.add(strAct);
+			telephone.call(strAct, phoneBook);
+			telephone.sms(strAct, phoneBook);
+			telephone.exit(strAct);
 	}
 }
 

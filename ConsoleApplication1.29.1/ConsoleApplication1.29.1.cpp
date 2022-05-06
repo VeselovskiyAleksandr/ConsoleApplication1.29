@@ -158,7 +158,7 @@ static int numberMelody = Player::TrackSize();
 			countPlay++;
 			cout<< PlayList[num].title<<" "<< PlayList[num].duration<<" "<< PlayList[num].dateCreation << "\n";
 	}
-		if (commandPlay != "play") {
+		if ((commandPlay != "play")&&(commandPlay != "next")){
 			countPlay = 0;
 		}
 }
@@ -198,7 +198,7 @@ int main()
 	vector<Track>PlayList = Player::load(melodyPlay);
 	while (strAct != "exit") {
 		cin >> strAct;
-	Song.play(strAct, PlayList);
+		Song.play(strAct, PlayList);
 	Song.record(strAct);
 	Song.pause(strAct);
     Song.stop(strAct);
