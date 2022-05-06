@@ -142,7 +142,7 @@ class Player {
 		else countComPaus = 0;
 	}
 
-static int next(){
+         int next(){
 static int numberMelody = Player::TrackSize();
 			int numM = 0;
 			srand(time(nullptr));
