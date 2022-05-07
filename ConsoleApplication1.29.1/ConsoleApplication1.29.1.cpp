@@ -39,7 +39,6 @@ public:
 		string get_dateCreation() {
 			return dateCreation;
 		}
-	//	vector<Track> melodyPlay; 
 };                                                   
 	                                               
 class Player {
@@ -131,18 +130,9 @@ class Player {
 		return 0;
 	}
 
-	 void pause(string commandPaus) {
-		static int countComPaus = 0;
-		if (commandPaus == "pause") {
-			if (countComPaus == 0) {
-				cout << "\nПауза.";
-				countComPaus++;
-			}
-		}
-		else countComPaus = 0;
-	}
 
-         int next(){
+        static int next(){
+ Player::TrackSize();
 static int numberMelody = Player::TrackSize();
 			int numM = 0;
 			srand(time(nullptr));
@@ -152,13 +142,24 @@ static int numberMelody = Player::TrackSize();
 
 	    void play(string commandPlay, vector<Track> PlayList){
 		static int countPlay = 0, num=0;
+		static int countComPaus = 0;
+		if (commandPlay == "pause") {
+			if (countComPaus == 0) {
+				cout << "\nПауза.";
+				countComPaus++;
+			}
+		}
 		if((commandPlay=="next")||((commandPlay == "play")&&( countPlay == 0))){
 			num = Player:: next();
-			cout << "\nСейчас звучит: ";
-			countPlay++;
+			cout << "\nСейчас звучит: ";		
 			cout<< PlayList[num].title<<" "<< PlayList[num].duration<<" "<< PlayList[num].dateCreation << "\n";
-	}
-		if ((commandPlay != "play")&&(commandPlay != "next")){
+            countPlay++;
+	}		
+		if ((commandPlay == "play") && (countComPaus != 0)) {
+			cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
+			countComPaus = 0;
+		}
+		if ((commandPlay != "play")&&(commandPlay != "next")&& (commandPlay != "pause")){
 			countPlay = 0;
 		}
 }
@@ -200,7 +201,6 @@ int main()
 		cin >> strAct;
 		Song.play(strAct, PlayList);
 	Song.record(strAct);
-	Song.pause(strAct);
     Song.stop(strAct);
 	Song.exit(strAct);
 	}
