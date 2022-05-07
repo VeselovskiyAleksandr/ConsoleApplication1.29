@@ -156,6 +156,7 @@ static int numberMelody = Player::TrackSize();
             countPlay++;
 	}		
 		if ((commandPlay == "play") && (countComPaus != 0)) {
+			cout << "\nСейчас звучит: ";
 			cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
 			countComPaus = 0;
 		}
