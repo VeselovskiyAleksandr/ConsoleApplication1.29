@@ -48,12 +48,6 @@ class Player {
 				vector<Track> melodyPlay;
 			int countMelody = 0;
 				ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
-				if (file.is_open()) {
-					cout << "\nЗагрузка мелодий.\n";
-				}
-				else {
-					cerr << "\nThe file is not found. ";
-				}
 				while (!file.eof()) {
                     string str = "", str1 = "";
 					file >> str >> str1;           // строки str и str1 собирают
@@ -169,7 +163,15 @@ int main()
 	cout << "\n                       next - переход к следующей записи;";
 	cout << "\n                       stop - прекращение воспроизведения;";
 	cout << "\n                       record - запись;";
-	cout << "\n                       exit - выключение плеера.";
+	cout << "\n                       exit - выключение плеера.";	
+		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
+		if (file.is_open()) {
+			cout << "\nЗагрузка мелодий.\n";
+		}
+		else {
+			cerr << "\nThe file is not found. ";
+			return 1;
+		}	
 	Player Song;
 	numMelody =Song.TrackSize()-1;
 	while (strAct != "exit") {
@@ -219,6 +221,7 @@ if (strAct == "pause") {
 			bPause = false;
 		}		
 	}
+	file.close();
 	return 0;
 }
 

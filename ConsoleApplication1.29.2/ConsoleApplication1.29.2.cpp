@@ -14,7 +14,6 @@ class Phone;
 
 class Contacts {
 	friend class Phone;
-
 string subscriber="", phoneNumber="";
 int serialNumber=0;
 public:
@@ -77,26 +76,19 @@ public:
 
 	 int PhoneSize() {
 		 int countLoad = 0;
-		//vector<Contacts>phoneBook;
-		//countLoad = phoneBook.size();
-		
-		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");
-		
+		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");		
 		if (!file.is_open()) {
 			cerr << "\nThe file is not found. ";
 			return -1;
 		}
-
 		while (!file.eof()) {
             string str = "";
 			file >> str;
 			if (str == ";") {
 				countLoad++;
-cout<<" "<< countLoad;
 			}
 			str = "";
-		}
-		
+		}	
 		file.close();
 		return countLoad;
 	}
@@ -122,7 +114,6 @@ cout<<" "<< countLoad;
 	}
 
 	 void call( int number) {	
-			// static = Phone::PhoneSize();
 			 int telNumber = 0;
 			 int interval = 0;
 			 cout << "\nВведите номер абонента.";
@@ -144,7 +135,6 @@ cout<<" "<< countLoad;
 		 }
 
 	 void sms(int number) {
-			// static  = Phone::PhoneSize();
 			 string message = "";
 			 int telNumber = 0;
 			 cout << "\nВведите номер телефона.";
@@ -183,12 +173,9 @@ int main() {
 	cout << "                      exit - выходиз программы;\n";
 	string strAct = "";
 	int numberSubscribers = 0;
-	//Contacts contact;
 	Phone telephone;
 	numberSubscribers = telephone.PhoneSize();
 	cout << numberSubscribers;
-	//vector<Contacts>subscriberList;
-	//vector<Contacts>phoneBook =telephone. load();
 	while (strAct != "exit") {
     cin >> strAct;
 	if (strAct == "add") {
