@@ -48,8 +48,7 @@ public:
 
 class Display {
 	public:
-		static void showDisplay(string commandShD, int& wX, int& wY, int& wW, int& wH) {
-			if (commandShD == "display") {
+		 void showDisplay(int& wX, int& wY, int& wW, int& wH) {		
 				int numberRow = 50, numberCol = 80;
 				for (int row = 0; row < numberRow; row++) {
 					for (int col = 0; col < numberCol; col++) {
@@ -71,13 +70,11 @@ class Display {
 					}
 				}
 			}
-		}
 };
 
 class MonitorControl {
 public:
-	 void resize(string commandRes, int* ww, int* wh) {
-		if ((commandRes == "resize")|| (commandRes =="creation")) {
+	 void resize(int* ww, int* wh) {
 			Window window;
 			vector<Window>windows;
 			int w = 0, h = 0;
@@ -96,10 +93,8 @@ public:
 			(*wh) = window.get_heightDisplay();
 			cout << "\nРазмер окна: " << window.get_widthDisplay() << "X" << window.get_heightDisplay();
 		}
-	}
 
-  void move(string commandMov, int* wx, int* wy, int& W, int& H) {
-	if ((commandMov == "move")|| (commandMov == "creation")) {
+  void move(int* wx, int* wy, int& W, int& H) {
 		Window window;
 		int X = 0, Y = 0;
 		do {
@@ -115,25 +110,20 @@ public:
 		(*wx) = window.get_coordinateX();
 		(*wy) = window.get_coordinateY();
 	}
-}
 
-static vector< Window> windowCreation(string strCReat, string commandRes, int* ww, int* wh, string commandMov, int* wx, int* wy, int& W, int& H) {
+ vector< Window> windowCreation( int* ww, int* wh, int* wx, int* wy, int& W, int& H) {
         Window  window;
 		MonitorControl control;
-		vector < Window> windows;
-	if (strCReat == "creation") {
-		control.resize(commandRes, ww, wh);
-		control.move(commandMov, wx, wy, W, H);
+		vector < Window> windows;	
+		control.resize(ww, wh);
+		control.move(wx, wy, W, H);
 		windows.push_back(window);
-	}
 	return windows;
 }
 
- void close(string commandClose) {
-	if (commandClose == "close") {
+ void close() {
 		cout << "\nВыключение монитора.";
 	}
-  }
 };
 
 
@@ -148,19 +138,28 @@ int main()
 	cout << "\n                   close - выход из программы;\n";
 int abs = 0, ord = 0, wWidth=0, wHeight=0;	
 MonitorControl control;
+Display monitor;
 	string command = "creation";
 	cout<<"\nСоздание окна.";
-	vector< Window>winCreat = MonitorControl::windowCreation(command, command, &wWidth, &wHeight, command, &abs, &ord, wWidth, wHeight);
+	vector< Window>winCreat =control.windowCreation(&wWidth, &wHeight, &abs, &ord, wWidth, wHeight);
 	command = "display";
-	Display::showDisplay(command, abs, ord, wWidth, wHeight);
+	monitor.showDisplay(abs, ord, wWidth, wHeight);
 	command = "";
 	while(command!="close"){
 		cout << "\nВведите коменду.";
 		cin >> command;
-			Display:: showDisplay(command, abs, ord, wWidth, wHeight);
-			control.move(command, &abs, &ord, wWidth, wHeight);
-			control.resize(command, &wWidth, &wHeight);
-			control.close(command);
+		if (command == "display") {
+			monitor.showDisplay(abs, ord, wWidth, wHeight);
+		}
+		else if (command == "move") {
+			control.move(&abs, &ord, wWidth, wHeight);
+		}
+		else if (command == "resize") {
+			control.resize(&wWidth, &wHeight);
+		}
+		else if (command == "close") {
+			control.close();
+		}
 	}
 	return 0;
 }

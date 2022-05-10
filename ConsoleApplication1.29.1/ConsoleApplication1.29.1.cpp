@@ -42,7 +42,7 @@ public:
 };                                                   
 	                                               
 class Player {
-            public: 				
+            public: 
             vector<Track> load() {
 			    Track  melody; 
 				vector<Track> melodyPlay;
