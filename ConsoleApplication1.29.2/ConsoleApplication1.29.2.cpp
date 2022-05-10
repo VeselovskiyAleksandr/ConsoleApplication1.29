@@ -49,12 +49,6 @@ public:
 		vector <Contacts> subscriberList;
 		int subscrNumber = 0;
 		ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");
-		if (file.is_open()) {
-			cout << "\nЗагрузка телефона.\n";
-		}
-		else {
-			cerr << "\nThe file is not found. ";
-		}
 		while (!file.eof()) {
             string strPhone = "", strSubscr = "", str="";           
 			int strNumber = 0;
@@ -171,11 +165,18 @@ int main() {
 	cout << "                      call - вызов абонента;\n";
 	cout << "                      sms - отпавка sms-сообщений;\n";
 	cout << "                      exit - выходиз программы;\n";
+	ifstream file("C:\\Users\\Александр\\Documents\\text for program\\phonebook.txt");
+	if (file.is_open()) {
+		cout << "\nЗагрузка телефона.\n";
+	}
+	else {
+		cerr << "\nThe file is not found. ";
+		return 1;
+	}
 	string strAct = "";
 	int numberSubscribers = 0;
 	Phone telephone;
 	numberSubscribers = telephone.PhoneSize();
-	cout << numberSubscribers;
 	while (strAct != "exit") {
     cin >> strAct;
 	if (strAct == "add") {
@@ -191,6 +192,8 @@ int main() {
 		telephone.exit();
 	}
 	}
+	file.close();
+	return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
