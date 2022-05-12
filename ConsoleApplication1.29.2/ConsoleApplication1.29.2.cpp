@@ -173,6 +173,7 @@ int main() {
 		cerr << "\nThe file is not found. ";
 		return 1;
 	}
+    file.close();
 	string strAct = "";
 	int numberSubscribers = 0;
 	Phone telephone;
@@ -191,8 +192,7 @@ int main() {
 	else if (strAct == "exit") {
 		telephone.exit();
 	}
-	}
-	file.close();
+  }	
 	return 0;
 }
 

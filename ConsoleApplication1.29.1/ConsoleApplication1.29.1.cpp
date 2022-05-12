@@ -172,6 +172,7 @@ int main()
 			cerr << "\nThe file is not found. ";
 			return 1;
 		}	
+		file.close();
 	Player Song;
 	numMelody =Song.TrackSize()-1;
 	while (strAct != "exit") {
@@ -221,7 +222,7 @@ if (strAct == "pause") {
 			bPause = false;
 		}		
 	}
-	file.close();
+	//file.close();
 	return 0;
 }
 
