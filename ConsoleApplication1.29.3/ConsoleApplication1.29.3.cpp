@@ -45,32 +45,9 @@ public:
 };
 
 class MonitorControl {
-	
-public:
-	void showDisplay(int& wX, int& wY, int& wW, int& wH) {		
-				int numberRow = 50, numberCol = 80;
-				for (int row = 0; row < numberRow; row++) {
-					for (int col = 0; col < numberCol; col++) {
-						if (row == 0 || row == numberRow - 1) {
-							cout << "-";
-						}
-						else if (col == 0 || col == numberCol - 1) {
-							cout << "|";
-						}
-						else if (row >= wY && row < wY + wH && col >= wX && col < wX + wW) {
-							cout << "1";
-						}
-						else {
-							cout << "0";
-						}
-						if (col == numberCol - 1) {
-							cout << "\n";
-						}
-					}
-				}
-			}
-	
-	 void resize(int* ww, int* wh) {
+	int abs = 0, ord = 0, wWidth = 0, wHeight = 0;
+	public:
+		void resize() {
 			Window window;
 			vector<Window>windows;
 			int w = 0, h = 0;
@@ -85,12 +62,12 @@ public:
 			} while (w < 0 || h < 0);
 			window.set_widthDisplay(w);
 			window.set_heightDisplay(h);
-			(*ww) = window.get_widthDisplay();
-			(*wh) = window.get_heightDisplay();
+			wWidth = window.get_widthDisplay();
+			wHeight = window.get_heightDisplay();
 			cout << "\nРазмер окна: " << window.get_widthDisplay() << "X" << window.get_heightDisplay();
 		}
 
-  void move(int* wx, int* wy, int& W, int& H) {	
+		void move() {
 		Window window;
 		int X = 0, Y = 0;		
 		do {
@@ -99,23 +76,36 @@ public:
 			cout << "\nУкажите ординату точки привязки.";
 			cin >> Y;
 			window.set_anchСoordinate(X, Y);
-			if (X < 1 || X + W > 79 || Y < 1 || Y + H > 49) {
+			if (X < 1 || X + wWidth > 79 || Y < 1 || Y + wHeight > 49) {
 				cout << "\nЗадайте правильно координаты.";
 			}
-		} while (X < 0 || X + W > 79 || Y < 0 || Y + H>49);
-		(*wx) = window.get_coordinateX();
-		(*wy) = window.get_coordinateY();
+		} while (X < 0 || X + wWidth  > 79 || Y < 0 || Y + wHeight>49);
+		abs= window.get_coordinateX();
+		ord= window.get_coordinateY();
 	}
-
- vector< Window> windowCreation( int* ww, int* wh, int* wx, int* wy, int& W, int& H) {
-        Window  window;
-		MonitorControl control;
-		vector < Window> windows;	
-		control.resize(ww, wh);
-		control.move(wx, wy, W, H);
-		windows.push_back(window);
-	return windows;
-}
+	
+	void showDisplay() {
+				int numberRow = 50, numberCol = 80;
+				for (int row = 0; row < numberRow; row++) {
+					for (int col = 0; col < numberCol; col++) {
+						if (row == 0 || row == numberRow - 1) {
+							cout << "-";
+						}
+						else if (col == 0 || col == numberCol - 1) {
+							cout << "|";
+						}
+						else if (row >= ord && row < ord + wHeight && col >= abs && col < abs + wWidth) {
+							cout << "1";
+						}
+						else {
+							cout << "0";
+						}
+						if (col == numberCol - 1) {
+							cout << "\n";
+						}
+					}
+				}
+			}
 
  void close() {
 		cout << "\nВыключение монитора.";
@@ -127,28 +117,25 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
 	cout << "\nКоманды программы:";
-	cout << "\n                   creation - создание окна;";
 	cout << "\n                   move - перемещение вектора на заданные координаты;";
 	cout << "\n                   resize - ввод размера окна;";
 	cout << "\n                   display - вывод текущего изображения монитора;";
 	cout << "\n                   close - выход из программы;\n";
-int abs = 0, ord = 0, wWidth=0, wHeight=0;	
 MonitorControl control;
 string command = "";
-	cout<<"\nСоздание окна.";
-	vector< Window>winCreat =control.windowCreation(&wWidth, &wHeight, &abs, &ord, wWidth, wHeight);	
-	control.showDisplay(abs, ord, wWidth, wHeight);
+	cout<<"\nСоздание окна.\n";
+	control.showDisplay();  
 	while(command!="close"){
 		cout << "\nВведите коменду.";
 		cin >> command;
 		if (command == "display") {
-			control.showDisplay(abs, ord, wWidth, wHeight);
+			control.showDisplay(); 
 		}
 		else if (command == "move") {
-			control.move(&abs, &ord, wWidth, wHeight);
+			control.move();
 		}
 		else if (command == "resize") {
-			control.resize(&wWidth, &wHeight);
+			control.resize();
 		}
 		else if (command == "close") {
 			control.close();
