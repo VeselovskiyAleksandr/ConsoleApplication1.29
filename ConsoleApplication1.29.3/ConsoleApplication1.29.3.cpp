@@ -4,8 +4,6 @@
 #include <iostream>
 #include <locale.h>
 #include <string>
-#include <fstream>
-#include <vector>
 using namespace std;
 
 class MonitorControl;
@@ -49,7 +47,6 @@ class MonitorControl {
 	public:
 		void resize() {
 			Window window;
-			vector<Window>windows;
 			int w = 0, h = 0;
 			do {
 				cout << "\nУкажите ширину окна.";
