@@ -42,6 +42,7 @@ public:
 };                                                   
 	                                               
 class Player {
+	bool bStop = false, bPlay=true, bPause=false, bNext=true, bNextMelody=false;
             public: 
             vector<Track> load() {
 			    Track  melody; 
@@ -123,26 +124,64 @@ class Player {
 			}
 		return 0;
 	}
-
- int next(int numberMelody){
-			int numM = 0;
-			cout << numberMelody;
-			srand(time(nullptr));
-			numM = rand() % numberMelody + 1;
-			return numM;
+private:
+ int numberMelody = TrackSize()-1, numM = 0, num = 0; 
+public:
+	 int next() {	
+			 srand(time(nullptr));
+			 numM = rand() % numberMelody + 1;
+			 return numM;
 		}
 
-	    void play(int num){
-			cout << "\nСейчас звучит: ";		
-			cout<< PlayList[num].title<<" "<< PlayList[num].duration<<" "<< PlayList[num].dateCreation << "\n";
+	 void nextMelody() {
+		 if (bNextMelody == true) {
+			 num = next();
+			 cout << "\nСейчас звучит: ";
+			 cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
+			 bStop = true;
+			 bPause = true;
+		 }
+	 }
+
+	 void play() {
+		 if ((bPlay == true)&&(bNext==true)){
+			 num = next();
+			 cout << "\nСейчас звучит: ";
+			 cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
+			 bPlay = false;
+			 bStop = true;
+			 bPause = true;
+			 bNextMelody = true;
+		 }
+		 else if (bPlay == true) {
+			 cout << "\nСейчас звучит: ";
+			 cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
+			 bPlay = false;
+			 bStop = true;
+			 bPause = true;
+			 bNextMelody = true;
+		 }
 }
 
 		void pause() {
-			cout << "\nПауза.";
+			if (bPause == true) {
+				cout << "\nПауза.";
+				bPause = false;
+				bPlay = true;
+				bNext = false;
+				bNextMelody = false;
+			}
 		}
 
 		 void stop() {
-					cout << "\nВоспроизведение остановлено.";
+			 if (bStop == true) {
+				 cout << "\nВоспроизведение остановлено.";
+				 bStop = false;
+				 bPlay = true;
+				 bNext = true;
+				 bNextMelody = false;
+				 bPause = false;
+			 } 
 	 }
 
          void exit() {
@@ -154,8 +193,6 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
 	string   strAct = "";
-	int numMelody = 0, anotherMelody = 0;
-	bool bPlay=true, bStop=false, bNext=false, bPause=false;
 	cout << "\n                               АУДИОПЛЕЕР.";
 	cout << "\nНастройки аудиоплеера: ";
 	cout << "\n                       play - воспроизведение звукозаписи;";
@@ -174,55 +211,27 @@ int main()
 		}	
 		file.close();
 	Player Song;
-	numMelody =Song.TrackSize()-1;
 	while (strAct != "exit") {
 		cin >> strAct;		
-		if ((strAct == "play") && (bPlay == true)) {
-			if (bPause == true) {
-				anotherMelody = Song.next(numMelody);
-				Song.play(anotherMelody);
-				bPlay = false;
+		if (strAct == "play") {
+				Song.play();				
 			}
-			else if (bPause ==false) {
-				Song.play(anotherMelody);	
-				bPlay = false;
-			}
-			bPause = true;
+		else if (strAct == "next"){
+			Song.nextMelody();
 		}
-		else if ((strAct == "next") && (bNext == true)) {
-			anotherMelody = Song.next(numMelody);
-			Song.play(anotherMelody);
-		}
-		else if ((strAct == "pause")&&(bPause==true)) {
+		else if (strAct == "pause") {
 			Song.pause();
-			bPause=false;
 		}
 		else if (strAct == "record") {
 			Song.record();
-			numMelody = Song.TrackSize();
 		}
-		else if ((strAct == "stop")&&(bStop==true)) {
-			Song.stop();
-			bNext = false;
+		else if (strAct == "stop"){
+			Song.stop();			
 		}
 		else if (strAct == "exit") {
 			Song.exit();
 		}
-if ((strAct == "play")||(strAct == "next")) {
-			bStop = true;
-			bPause = true;
-			bNext = true;
-		}
-		if ((strAct=="stop")||(strAct=="pause")) {
-			bPlay = true;
-			bStop = false;
-		}
-if (strAct == "pause") {
-			bPlay = true;
-			bPause = false;
-		}		
 	}
-	//file.close();
 	return 0;
 }
 

@@ -8,11 +8,9 @@
 #include <vector>
 using namespace std;
 
-class Display;
 class MonitorControl;
 
 class Window {
-	friend class Display;
 	friend class MonitorControl;
 	int anchСoordinateX, anchCoordinateY, widthDisplay, heightDisplay;
 public:
@@ -46,9 +44,10 @@ public:
     }
 };
 
-class Display {
-	public:
-		 void showDisplay(int& wX, int& wY, int& wW, int& wH) {		
+class MonitorControl {
+	
+public:
+	void showDisplay(int& wX, int& wY, int& wW, int& wH) {		
 				int numberRow = 50, numberCol = 80;
 				for (int row = 0; row < numberRow; row++) {
 					for (int col = 0; col < numberCol; col++) {
@@ -70,10 +69,7 @@ class Display {
 					}
 				}
 			}
-};
-
-class MonitorControl {
-public:
+	
 	 void resize(int* ww, int* wh) {
 			Window window;
 			vector<Window>windows;
@@ -94,9 +90,9 @@ public:
 			cout << "\nРазмер окна: " << window.get_widthDisplay() << "X" << window.get_heightDisplay();
 		}
 
-  void move(int* wx, int* wy, int& W, int& H) {
+  void move(int* wx, int* wy, int& W, int& H) {	
 		Window window;
-		int X = 0, Y = 0;
+		int X = 0, Y = 0;		
 		do {
 			cout << "\nУкажите абсциссу точки привязки.";
 			cin >> X;
@@ -138,18 +134,15 @@ int main()
 	cout << "\n                   close - выход из программы;\n";
 int abs = 0, ord = 0, wWidth=0, wHeight=0;	
 MonitorControl control;
-Display monitor;
-	string command = "creation";
+string command = "";
 	cout<<"\nСоздание окна.";
-	vector< Window>winCreat =control.windowCreation(&wWidth, &wHeight, &abs, &ord, wWidth, wHeight);
-	command = "display";
-	monitor.showDisplay(abs, ord, wWidth, wHeight);
-	command = "";
+	vector< Window>winCreat =control.windowCreation(&wWidth, &wHeight, &abs, &ord, wWidth, wHeight);	
+	control.showDisplay(abs, ord, wWidth, wHeight);
 	while(command!="close"){
 		cout << "\nВведите коменду.";
 		cin >> command;
 		if (command == "display") {
-			monitor.showDisplay(abs, ord, wWidth, wHeight);
+			control.showDisplay(abs, ord, wWidth, wHeight);
 		}
 		else if (command == "move") {
 			control.move(&abs, &ord, wWidth, wHeight);
