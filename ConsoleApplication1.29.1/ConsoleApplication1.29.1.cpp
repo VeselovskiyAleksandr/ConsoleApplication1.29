@@ -41,7 +41,7 @@ public:
 };                                                   
 	                                               
 class Player {
-	bool bStop = false, bPlay=true, bPause=false, bNext=true, bNextMelody=false;
+	bool bPlay=true, bPause=false, bNext=true, bNextMelody=false;
             public: 
             vector<Track> load() {
 			    Track  melody; 
@@ -72,9 +72,9 @@ class Player {
 				}			
 				return  melodyPlay;
 		}
-
+private:
              vector<Track> PlayList= load();
-
+public:
 	 int TrackSize() {
 		int count = 0;
 	ifstream file("C:\\Users\\Александр\\Documents\\text for program\\playerM.txt");
@@ -137,7 +137,6 @@ public:
 			 num = next();
 			 cout << "\nСейчас звучит: ";
 			 cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
-			 bStop = true;
 			 bPause = true;
 		 }
 	 }
@@ -148,7 +147,6 @@ public:
 			 cout << "\nСейчас звучит: ";
 			 cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
 			 bPlay = false;
-			 bStop = true;
 			 bPause = true;
 			 bNextMelody = true;
 		 }
@@ -156,7 +154,6 @@ public:
 			 cout << "\nСейчас звучит: ";
 			 cout << PlayList[num].title << " " << PlayList[num].duration << " " << PlayList[num].dateCreation << "\n";
 			 bPlay = false;
-			 bStop = true;
 			 bPause = true;
 			 bNextMelody = true;
 		 }
@@ -173,9 +170,8 @@ public:
 		}
 
 		 void stop() {
-			 if (bStop == true) {
+			 if (bPause == true) {
 				 cout << "\nВоспроизведение остановлено.";
-				 bStop = false;
 				 bPlay = true;
 				 bNext = true;
 				 bNextMelody = false;
